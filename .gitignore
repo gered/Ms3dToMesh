@@ -1,0 +1,14 @@
+.DS_Store
+*.sdf
+*.opensdf
+*.user
+*.suo
+/*.exe
+/*.idb
+/*.ilk
+/*.pdb
+*.vpwhistu
+*.vtg
+/*.dll
+/ms3dtomesh
+/build
