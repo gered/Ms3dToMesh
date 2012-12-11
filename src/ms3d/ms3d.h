@@ -116,6 +116,7 @@ public:
 	unsigned short GetNumMeshes() const                    { return m_numMeshes; }
 	unsigned short GetNumMaterials() const                 { return m_numMaterials; }
 	unsigned short GetNumJoints() const                    { return m_numJoints; }
+	int GetNumAnimations() const                           { return m_animations.size(); }
 	float GetAnimationFps() const                          { return m_animationFps; }
 	int GetNumFrames() const                               { return m_numFrames; }
 	Ms3dVertex* GetVertices() const                        { return m_vertices; }
@@ -123,6 +124,7 @@ public:
 	Ms3dMesh* GetMeshes() const                            { return m_meshes; }
 	Ms3dMaterial* GetMaterials() const                     { return m_materials; }
 	Ms3dJoint* GetJoints() const                           { return m_joints; }
+	const Ms3dAnimation* GetAnimation(int index) const     { return &m_animations[index]; }
 
 	int FindIndexOfJoint(const std::string &jointName) const;
 
