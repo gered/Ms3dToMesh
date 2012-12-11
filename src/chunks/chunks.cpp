@@ -182,7 +182,7 @@ void WriteChunk(JointToVerticesChunk *chunk, FILE *fp)
 	if (size == 0)
 		return;
 
-	fputs("JNT", fp);
+	fputs("JTV", fp);
 	fwrite(&size, sizeof(uint32_t), 1, fp);
 	uint32_t count = chunk->GetCount();
 	fwrite(&count, sizeof(uint32_t), 1, fp);
