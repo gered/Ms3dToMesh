@@ -10,7 +10,7 @@ struct Triangle
 	uint32_t vertices[3];
 	uint32_t groupIndex;
 	Vector3 normals[3];
-	Vector2 texCoords[2];
+	Vector2 texCoords[3];
 
 	uint32_t GetSize() const;
 };
@@ -22,7 +22,7 @@ inline uint32_t Triangle::GetSize() const
 	size += sizeof(uint32_t) * 3;      // vertices (index)
 	size += sizeof(uint32_t);          // group index
 	size += (sizeof(float) * 3) * 3;   // normals (xyz)
-	size += (sizeof(float) * 3) * 2;   // texcoords (uv)
+	size += (sizeof(float) * 2) * 3;   // texcoords (uv)
 
 	return size;
 }
