@@ -2,6 +2,7 @@
 #include <string>
 #include <exception>
 
+#include "meshfile.h"
 #include "ms3d/ms3d.h"
 
 int main(int argc, char **argv)
@@ -73,7 +74,7 @@ int main(int argc, char **argv)
 		printf("Error loading MS3D file.\n\n");
 		return 1;
 	}
-	if (!ms3d->ConvertToMesh(meshFile, scaleFactor))
+	if (!ConvertToMeshFile(meshFile, ms3d, scaleFactor))
 	{
 		printf("Error converting MS3D to MESH.\n\n");
 		return 1;
