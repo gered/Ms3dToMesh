@@ -6,6 +6,6 @@
 
 class Ms3d;
 
-BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source);
+BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, float scaleFactor);
 
 #endif

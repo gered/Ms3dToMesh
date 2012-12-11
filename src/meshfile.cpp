@@ -21,7 +21,7 @@
 #include "geometry/vector3.h"
 #include <string>
 
-BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source)
+BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, float scaleFactor)
 {
 	return FALSE;
 }
