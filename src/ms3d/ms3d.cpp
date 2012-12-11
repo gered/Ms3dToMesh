@@ -427,7 +427,7 @@ bool Ms3d::ConvertToMesh(const std::string &file, float scaleFactor)
 	return true;
 }
 
-int Ms3d::FindIndexOfJoint(const std::string &jointName)
+int Ms3d::FindIndexOfJoint(const std::string &jointName) const
 {
 	if (jointName.length() == 0)
 		return -1;

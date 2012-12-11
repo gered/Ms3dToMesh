@@ -111,21 +111,22 @@ public:
 	bool Load(const std::string &file);
 	bool ConvertToMesh(const std::string &file, float scaleFactor);
 
-	unsigned short GetNumVertices()                        { return m_numVertices; }
-	unsigned short GetNumTriangles()                       { return m_numTriangles; }
-	unsigned short GetNumMeshes()                          { return m_numMeshes; }
-	unsigned short GetNumMaterials()                       { return m_numMaterials; }
-	unsigned short GetNumJoints()                          { return m_numJoints; }
-	float GetAnimationFps()                                { return m_animationFps; }
-	int GetNumFrames()                                     { return m_numFrames; }
-	Ms3dVertex* GetVertices()                              { return m_vertices; }
-	Ms3dTriangle* GetTriangles()                           { return m_triangles; }
-	Ms3dMesh* GetMeshes()                                  { return m_meshes; }
-	Ms3dMaterial* GetMaterials()                           { return m_materials; }
-	Ms3dJoint* GetJoints()                                 { return m_joints; }
+	unsigned short GetNumVertices() const                  { return m_numVertices; }
+	unsigned short GetNumTriangles() const                 { return m_numTriangles; }
+	unsigned short GetNumMeshes() const                    { return m_numMeshes; }
+	unsigned short GetNumMaterials() const                 { return m_numMaterials; }
+	unsigned short GetNumJoints() const                    { return m_numJoints; }
+	float GetAnimationFps() const                          { return m_animationFps; }
+	int GetNumFrames() const                               { return m_numFrames; }
+	Ms3dVertex* GetVertices() const                        { return m_vertices; }
+	Ms3dTriangle* GetTriangles() const                     { return m_triangles; }
+	Ms3dMesh* GetMeshes() const                            { return m_meshes; }
+	Ms3dMaterial* GetMaterials() const                     { return m_materials; }
+	Ms3dJoint* GetJoints() const                           { return m_joints; }
+
+	int FindIndexOfJoint(const std::string &jointName) const;
 
 private:
-	int FindIndexOfJoint(const std::string &jointName);
 
 	unsigned short m_numVertices;
 	unsigned short m_numTriangles;
