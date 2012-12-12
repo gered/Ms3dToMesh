@@ -2,7 +2,7 @@
 #define __GEOMETRY_GROUP_H_INCLUDED__
 
 #include "../common.h"
-#include <string.h>
+#include <string>
 
 struct Group
 {

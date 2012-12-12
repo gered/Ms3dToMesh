@@ -3,6 +3,7 @@
 
 #include "../common.h"
 #include "../geometry/group.h"
+#include <vector>
 
 struct GroupsChunk
 {

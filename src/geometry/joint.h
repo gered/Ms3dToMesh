@@ -3,7 +3,7 @@
 
 #include "../common.h"
 #include "vector3.h"
-#include <string.h>
+#include <string>
 
 struct Joint
 {

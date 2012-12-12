@@ -17,6 +17,8 @@
 #include "../geometry/triangle.h"
 #include "../geometry/vector2.h"
 #include "../geometry/vector3.h"
+#include <string>
+#include <vector>
 
 void WriteFileHeader(FILE *fp)
 {
