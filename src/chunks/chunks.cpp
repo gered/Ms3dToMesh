@@ -109,18 +109,6 @@ void WriteChunk(TrianglesChunk *chunk, FILE *fp)
 		fwrite(&triangle->vertices[2], sizeof(uint32_t), 1, fp);
 
 		fwrite(&triangle->groupIndex, sizeof(uint32_t), 1, fp);
-
-		for (int j = 0; j < 3; ++j)
-		{
-			fwrite(&triangle->normals[j].x, sizeof(float), 1, fp);
-			fwrite(&triangle->normals[j].y, sizeof(float), 1, fp);
-			fwrite(&triangle->normals[j].z, sizeof(float), 1, fp);
-		}
-		for (int j = 0; j < 3; ++j)
-		{
-			fwrite(&triangle->texCoords[j].x, sizeof(float), 1, fp);
-			fwrite(&triangle->texCoords[j].y, sizeof(float), 1, fp);
-		}
 	}
 }
 
