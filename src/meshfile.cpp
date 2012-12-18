@@ -1,6 +1,6 @@
 #include "meshfile.h"
 
-#include "assets/animationsequence.h"
+#include "animationsequence.h"
 #include "ms3d/ms3d.h"
 #include "chunks/animations.h"
 #include "chunks/chunks.h"

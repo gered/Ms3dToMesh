@@ -2,7 +2,7 @@
 #define __CHUNKS_ANIMATIONS_H_INCLUDED__
 
 #include "../common.h"
-#include "../assets/animationsequence.h"
+#include "../animationsequence.h"
 #include <vector>
 
 struct AnimationsChunk

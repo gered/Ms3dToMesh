@@ -9,7 +9,7 @@
 #include "jointtovertices.h"
 #include "keyframes.h"
 #include "animations.h"
-#include "../assets/animationsequence.h"
+#include "../animationsequence.h"
 #include "../geometry/group.h"
 #include "../geometry/joint.h"
 #include "../geometry/jointvertexinfo.h"
