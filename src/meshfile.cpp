@@ -76,54 +76,39 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, floa
 	// now we start writing out the file
 
 	WriteFileHeader(fp);
+	
+	uint32_t numVertices = uniqueVertices.GetCount();
 
 	VerticesChunk *vertices = new VerticesChunk();
-	for (uint32_t i = 0; i < source->GetNumVertices(); ++i)
+	vertices->vertices.reserve(numVertices);
+	for (uint32_t i = 0; i < numVertices; ++i)
 	{
-		const Ms3dVertex *vertex = &source->GetVertices()[i];
-
-		Vector3 v = vertex->vertex;
+		Vector3 v = uniqueVertices.GetVertex(i)->vertex;
 		v *= scaleFactor;
-
+		
 		vertices->vertices.push_back(v);
 	}
 	WriteChunk(vertices, fp);
 
 	NormalsChunk *normals = new NormalsChunk();
-	normals->normals.resize(source->GetNumVertices());
-	// MS3D normals are stored per-triangle, but we want them to be stored
-	// per vertex instead (so if there are 'n' unique vertices in this model
-	// then we also want 'n' unique normals).
-	// This takes the normals from the MS3D triangles, gets the corresponding
-	// vertex index, and then stores the normal in our normals array at the
-	// same index location (thereby mapping normals to vertices).
-	for (uint32_t i = 0; i < source->GetNumTriangles(); ++i)
+	normals->normals.reserve(numVertices);
+	for (uint32_t i = 0; i < numVertices; ++i)
 	{
-		const Ms3dTriangle *triangle = &source->GetTriangles()[i];
-
-		for (int j = 0; j < 3; ++j)
-		{
-			uint16_t index = triangle->vertices[j];
-			Vector3 n = triangle->normals[j];
-			normals->normals[index] = n;
-		}
+		Vector3 n = uniqueVertices.GetVertex(i)->normal;
+		
+		normals->normals.push_back(n);
 	}
 	WriteChunk(normals, fp);
 
 	TexCoordsChunk *texCoords = new TexCoordsChunk();
-	texCoords->texCoords.resize(source->GetNumVertices());
-	// this works the same as the normals above
-	for (uint32_t i = 0; i < source->GetNumTriangles(); ++i)
+	texCoords->texCoords.reserve(numVertices);
+	for (uint32_t i = 0; i < numVertices; ++i)
 	{
-		const Ms3dTriangle *triangle = &source->GetTriangles()[i];
-
-		for (int j = 0; j < 3; ++j)
-		{
-			uint16_t index = triangle->vertices[j];
-			Vector2 t = triangle->texCoords[j];
-			texCoords->texCoords[index] = t;
-		}
+		Vector2 t = uniqueVertices.GetVertex(i)->texCoord;
+	
+		texCoords->texCoords.push_back(t);
 	}
+	WriteChunk(texCoords, fp);
 
 	TrianglesChunk *triangles = new TrianglesChunk();
 	for (uint32_t i = 0; i < source->GetNumTriangles(); ++i)
@@ -131,16 +116,26 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, floa
 		const Ms3dTriangle *triangle = &source->GetTriangles()[i];
 
 		Triangle t;
-		t.vertices[0] = triangle->vertices[0];
-		t.vertices[1] = triangle->vertices[1];
-		t.vertices[2] = triangle->vertices[2];
+		
+		for (int v = 0; v < 3; ++v)
+		{
+			// gather up existing MS3D triangle data for this point of the triangle
+			uint32_t index = triangle->vertices[v];
+			Vector3 vertex = source->GetVertices()[index].vertex;
+			Vector3 normal = triangle->normals[v];
+			Vector2 texCoord = triangle->texCoords[v];
+			
+			// find matching vertex index for these in our new collection of
+			// unique vertex data
+			int32_t newIndex = uniqueVertices.Find(vertex, normal, texCoord);
+			assert(newIndex != -1);
+			assert(newIndex < numVertices);
+			
+			// set the new unique vertex index in the output triangle data
+			t.vertices[v] = newIndex;
+		}
+		
 		t.groupIndex = triangle->meshIndex;
-		t.normals[0] = triangle->normals[0];
-		t.normals[1] = triangle->normals[1];
-		t.normals[2] = triangle->normals[2];
-		t.texCoords[0] = triangle->texCoords[0];
-		t.texCoords[1] = triangle->texCoords[1];
-		t.texCoords[2] = triangle->texCoords[2];
 
 		triangles->triangles.push_back(t);
 	}
@@ -175,12 +170,12 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, floa
 	WriteChunk(joints, fp);
 
 	JointToVerticesChunk *jointToVertices = new JointToVerticesChunk();
-	for (uint32_t i = 0; i < source->GetNumVertices(); ++i)
+	for (uint32_t i = 0; i < uniqueVertices.GetCount(); ++i)
 	{
-		const Ms3dVertex *vertex = &source->GetVertices()[i];
-
+		const UniqueVertex *vertex = uniqueVertices.GetVertex(i);
+		
 		JointVertexInfo jvi;
-		jvi.jointIndex = vertex->jointIndex;
+		jvi.jointIndex = vertex->joint;
 		jvi.weight = 1.0f;
 
 		jointToVertices->jointVertexInfo.push_back(jvi);
