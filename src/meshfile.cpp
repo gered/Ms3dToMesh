@@ -19,14 +19,61 @@
 #include "geometry/triangle.h"
 #include "geometry/vector2.h"
 #include "geometry/vector3.h"
+#include "geometry/uniquevertex.h"
+#include "geometry/uniquevertexcollection.h"
 #include <string>
 #include <vector>
+#include <assert.h>
 
 BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, float scaleFactor)
 {
 	FILE *fp = fopen(meshFilename.c_str(), "wb");
 	if (fp == NULL)
 		return FALSE;
+	
+	// collect all unique vertices (position + normal + texcoord) and the 
+	// original MS3D file data vertex index each one was originally from based 
+	// on the MS3D triangle data. In MS3D the triangle data can give the same
+	// vertex index different normals/texcoords based on which triangle the
+	// vertex is associated with... this however, is not a VBO-friendly 
+	// arrangement of vertex data.
+	// later on we can use uniqueVertices to look up the original MS3D vertex
+	// indices to find the new vertex index in our new collection to re-do
+	// the triangle and joint-to-vertex mappings.
+	// (TL;DR - here we make the MS3D vertices+triangles VBO-friendly)
+	UniqueVertexCollection uniqueVertices;
+	for (uint32_t i = 0; i < source->GetNumTriangles(); ++i)
+	{
+		const Ms3dTriangle *triangle = &source->GetTriangles()[i];
+		
+		Vector3 vertex;
+		Vector3 normal;
+		Vector2 texCoord;
+		
+		for (int v = 0; v < 3; ++v)
+		{
+			uint32_t vertexIndex = triangle->vertices[v];
+			const Ms3dVertex *originalVertex = &source->GetVertices()[vertexIndex];
+			
+			vertex = originalVertex->vertex;
+			normal = triangle->normals[v];
+			texCoord = triangle->texCoords[v];
+			
+			// attempt to add new unique vertex with this data (if a vertex
+			// already exists in uniqueVertices with this same data, this Add
+			// call won't add anything new, but will just return the existing
+			// index)
+			int32_t newIndex = uniqueVertices.Add(vertex, normal, texCoord, vertexIndex);
+			assert(newIndex > -1);
+			
+			// set the joint index as well since it's right here...
+			uniqueVertices.GetVertex(newIndex)->joint = originalVertex->jointIndex;
+		}
+	}
+	
+
+	
+	// now we start writing out the file
 
 	WriteFileHeader(fp);
 
