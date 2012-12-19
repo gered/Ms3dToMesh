@@ -1,7 +1,7 @@
 #ifndef __MS3D_H_INCLUDED__
 #define __MS3D_H_INCLUDED__
 
-#include "common.h"
+#include "../common.h"
 #include "../geometry/vector3.h"
 #include "../geometry/vector2.h"
 #include <string>
