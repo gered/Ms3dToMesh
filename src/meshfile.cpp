@@ -220,19 +220,16 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, cons
 	}
 	WriteChunk(keyframes, fp);
 
-	AnimationsChunk *animations = new AnimationsChunk();
-	for (int i = 0; i < source->GetNumAnimations(); ++i)
+	if (metadata->IsLoaded() && metadata->GetNumAnimations() > 0)
 	{
-		const Ms3dAnimation *animation = source->GetAnimation(i);
-
-		AnimationSequence a;
-		a.name = animation->name;
-		a.start = animation->startFrame;
-		a.end = animation->endFrame;
-
-		animations->animations.push_back(a);
+		AnimationsChunk *animations = new AnimationsChunk();
+		for (uint32_t i = 0; i < metadata->GetNumAnimations(); ++i)
+		{
+			AnimationSequence animation = metadata->GetAnimations()[i];
+			animations->animations.push_back(animation);
+		}
+		WriteChunk(animations, fp);
 	}
-	WriteChunk(animations, fp);
 
 	return TRUE;
 }

@@ -5,7 +5,6 @@
 #include "../geometry/vector3.h"
 #include "../geometry/vector2.h"
 #include <string>
-#include <vector>
 
 struct Ms3dHeader
 {
@@ -95,13 +94,6 @@ struct Ms3dJoint
 	}
 };
 
-struct Ms3dAnimation
-{
-	std::string name;
-	uint32_t startFrame;
-	uint32_t endFrame;
-};
-
 class Ms3d
 {
 public:
@@ -116,7 +108,6 @@ public:
 	uint16_t GetNumMeshes() const                          { return m_numMeshes; }
 	uint16_t GetNumMaterials() const                       { return m_numMaterials; }
 	uint16_t GetNumJoints() const                          { return m_numJoints; }
-	uint32_t GetNumAnimations() const                      { return m_animations.size(); }
 	float GetAnimationFps() const                          { return m_animationFps; }
 	uint32_t GetNumFrames() const                          { return m_numFrames; }
 	Ms3dVertex* GetVertices() const                        { return m_vertices; }
@@ -124,7 +115,6 @@ public:
 	Ms3dMesh* GetMeshes() const                            { return m_meshes; }
 	Ms3dMaterial* GetMaterials() const                     { return m_materials; }
 	Ms3dJoint* GetJoints() const                           { return m_joints; }
-	const Ms3dAnimation* GetAnimation(int index) const     { return &m_animations[index]; }
 
 	int32_t FindIndexOfMesh(const std::string &meshName) const;
 	int32_t FindIndexOfJoint(const std::string &jointName) const;
@@ -144,7 +134,6 @@ private:
 	Ms3dMesh *m_meshes;
 	Ms3dMaterial *m_materials;
 	Ms3dJoint *m_joints;
-	std::vector<Ms3dAnimation> m_animations;
 };
 
 #endif

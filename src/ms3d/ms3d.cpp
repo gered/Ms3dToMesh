@@ -186,57 +186,6 @@ BOOL Ms3d::Load(const std::string &file)
 	}
 
 	fclose(fp);
-
-	// check for an animation definition file
-	std::string animationFile = file;
-	animationFile.erase(animationFile.find_last_of('.', std::string::npos));
-	animationFile.append(".animations");
-
-	fp = fopen(animationFile.c_str(), "r");
-	if (fp != NULL)
-	{
-		char *buffer = new char[80];
-		std::string line;
-		std::string name;
-		std::string temp;
-		int32_t start;
-		int32_t end;
-
-		while (!feof(fp))
-		{
-			fgets(buffer, 80, fp);
-			line = buffer;
-
-			if (strlen(buffer) > 5)		// minimum length for a viable frame definition
-			{
-				// get animation name
-				int nameEnd = line.find_first_of(',');
-				if (nameEnd == std::string::npos)
-					continue;
-				name = line.substr(0, nameEnd);
-
-				// get start frame index
-				int startEnd = line.find_first_of(',', nameEnd + 1);
-				if (startEnd == std::string::npos)
-					continue;
-				temp = line.substr(nameEnd + 1, startEnd);
-				start = atoi(temp.c_str());
-
-				// get end frame index
-				temp = line.substr(startEnd + 1, std::string::npos);
-				end = atoi(temp.c_str());
-
-				Ms3dAnimation *animation = new Ms3dAnimation();
-				animation->name = name;
-				animation->startFrame = start;
-				animation->endFrame = end;
-				m_animations.push_back(*animation);
-			}
-		}
-		SAFE_DELETE_ARRAY(buffer);
-
-		fclose(fp);
-	}
 	return TRUE;
 }
 
