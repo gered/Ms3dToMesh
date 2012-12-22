@@ -22,7 +22,11 @@ public:
 	uint32_t GetNumGroupInfo() const                       { return m_groupInfo.size(); }
 	const ExtraGroupInfo* GetGroupInfo() const             { return &m_groupInfo[0]; }
 	
+	BOOL IsLoaded() const                                  { return m_isLoaded; }
+	
 private:
+	BOOL m_isLoaded;
+	
 	std::vector<AnimationSequence> m_animations;
 	std::vector<ExtraGroupInfo> m_groupInfo;
 };

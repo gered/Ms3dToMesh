@@ -8,10 +8,12 @@
 
 MetadataFile::MetadataFile()
 {
+	m_isLoaded = FALSE;
 }
 
 void MetadataFile::Release()
 {
+	m_isLoaded = FALSE;
 }
 
 BOOL MetadataFile::Load(const std::string &file)
