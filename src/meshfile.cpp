@@ -269,6 +269,16 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, cons
 	WriteChunk(animations, fp);
 	
 	fclose(fp);
+	
+	SAFE_DELETE(vertices);
+	SAFE_DELETE(normals);
+	SAFE_DELETE(texCoords);
+	SAFE_DELETE(triangles);
+	SAFE_DELETE(groups);
+	SAFE_DELETE(joints);
+	SAFE_DELETE(jointToVertices);
+	SAFE_DELETE(keyframes);
+	SAFE_DELETE(animations);
 
 	return TRUE;
 }
