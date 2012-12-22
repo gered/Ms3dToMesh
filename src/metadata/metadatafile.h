@@ -2,11 +2,10 @@
 #define __METADATA_METADATAFILE_H_INCLUDED__
 
 #include "../common.h"
+#include "../animationsequence.h"
+#include "../geometry/extragroupinfo.h"
 #include <string>
 #include <vector>
-
-struct AnimationSequence;
-struct ExtraGroupInfo;
 
 class MetadataFile
 {
