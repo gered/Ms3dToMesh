@@ -16,6 +16,12 @@ project "Ms3dToMesh"
 	files {
 		"./src/**.c*",
 		"./src/**.h",
+		"./lib/**.c*",
+		"./lib/**.h",
+		"./lib/**.hpp",
+	}
+	includedirs {
+		"./lib/pugixml",
 	}
 	debugdir "."
 	
