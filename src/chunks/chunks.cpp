@@ -29,6 +29,8 @@ void WriteFileHeader(FILE *fp)
 
 void WriteChunk(VerticesChunk *chunk, FILE *fp)
 {
+	if (chunk == NULL)
+		return;
 	uint32_t size = chunk->GetSize();
 	if (size == 0)
 		return;
@@ -50,6 +52,8 @@ void WriteChunk(VerticesChunk *chunk, FILE *fp)
 
 void WriteChunk(NormalsChunk *chunk, FILE *fp)
 {
+	if (chunk == NULL)
+		return;
 	uint32_t size = chunk->GetSize();
 	if (size == 0)
 		return;
@@ -71,6 +75,8 @@ void WriteChunk(NormalsChunk *chunk, FILE *fp)
 
 void WriteChunk(TexCoordsChunk *chunk, FILE *fp)
 {
+	if (chunk == NULL)
+		return;
 	uint32_t size = chunk->GetSize();
 	if (size == 0)
 		return;
@@ -91,6 +97,8 @@ void WriteChunk(TexCoordsChunk *chunk, FILE *fp)
 
 void WriteChunk(TrianglesChunk *chunk, FILE *fp)
 {
+	if (chunk == NULL)
+		return;
 	uint32_t size = chunk->GetSize();
 	if (size == 0)
 		return;
@@ -114,6 +122,8 @@ void WriteChunk(TrianglesChunk *chunk, FILE *fp)
 
 void WriteChunk(GroupsChunk *chunk, FILE *fp)
 {
+	if (chunk == NULL)
+		return;
 	uint32_t size = chunk->GetSize();
 	if (size == 0)
 		return;
@@ -142,6 +152,8 @@ void WriteChunk(GroupsChunk *chunk, FILE *fp)
 
 void WriteChunk(JointsChunk *chunk, FILE *fp)
 {
+	if (chunk == NULL)
+		return;
 	uint32_t size = chunk->GetSize();
 	if (size == 0)
 		return;
@@ -173,6 +185,8 @@ void WriteChunk(JointsChunk *chunk, FILE *fp)
 
 void WriteChunk(JointToVerticesChunk *chunk, FILE *fp)
 {
+	if (chunk == NULL)
+		return;
 	uint32_t size = chunk->GetSize();
 	if (size == 0)
 		return;
@@ -193,6 +207,8 @@ void WriteChunk(JointToVerticesChunk *chunk, FILE *fp)
 
 void WriteChunk(KeyframesChunk *chunk, FILE *fp)
 {
+	if (chunk == NULL)
+		return;
 	uint32_t size = chunk->GetSize();
 	if (size == 0)
 		return;
@@ -224,6 +240,8 @@ void WriteChunk(KeyframesChunk *chunk, FILE *fp)
 
 void WriteChunk(AnimationsChunk *chunk, FILE *fp)
 {
+	if (chunk == NULL)
+		return;
 	uint32_t size = chunk->GetSize();
 	if (size == 0)
 		return;
@@ -245,4 +263,3 @@ void WriteChunk(AnimationsChunk *chunk, FILE *fp)
 		fwrite(&a->end, 4, 1, fp);
 	}
 }
-
