@@ -29,9 +29,15 @@
 
 BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, const MetadataFile *metadata, float scaleFactor)
 {
-	FILE *fp = fopen(meshFilename.c_str(), "wb");
-	if (fp == NULL)
-		return FALSE;
+	VerticesChunk *vertices = NULL;
+	NormalsChunk *normals = NULL;
+	TexCoordsChunk *texCoords = NULL;
+	TrianglesChunk *triangles = NULL;
+	GroupsChunk *groups = NULL;
+	JointsChunk *joints = NULL;
+	JointToVerticesChunk *jointToVertices = NULL;
+	KeyframesChunk *keyframes = NULL;
+	AnimationsChunk *animations = NULL;
 	
 	// collect all unique vertices (position + normal + texcoord) and the 
 	// original MS3D file data vertex index each one was originally from based 
@@ -75,13 +81,11 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, cons
 	
 
 	
-	// now we start writing out the file
+	// populate all the chunks with converted Ms3d data
 
-	WriteFileHeader(fp);
-	
 	uint32_t numVertices = uniqueVertices.GetCount();
 
-	VerticesChunk *vertices = new VerticesChunk();
+	vertices = new VerticesChunk();
 	vertices->vertices.reserve(numVertices);
 	for (uint32_t i = 0; i < numVertices; ++i)
 	{
@@ -90,9 +94,8 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, cons
 		
 		vertices->vertices.push_back(v);
 	}
-	WriteChunk(vertices, fp);
 
-	NormalsChunk *normals = new NormalsChunk();
+	normals = new NormalsChunk();
 	normals->normals.reserve(numVertices);
 	for (uint32_t i = 0; i < numVertices; ++i)
 	{
@@ -100,9 +103,8 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, cons
 		
 		normals->normals.push_back(n);
 	}
-	WriteChunk(normals, fp);
 
-	TexCoordsChunk *texCoords = new TexCoordsChunk();
+	texCoords = new TexCoordsChunk();
 	texCoords->texCoords.reserve(numVertices);
 	for (uint32_t i = 0; i < numVertices; ++i)
 	{
@@ -110,9 +112,8 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, cons
 	
 		texCoords->texCoords.push_back(t);
 	}
-	WriteChunk(texCoords, fp);
 
-	TrianglesChunk *triangles = new TrianglesChunk();
+	triangles = new TrianglesChunk();
 	for (uint32_t i = 0; i < source->GetNumTriangles(); ++i)
 	{
 		const Ms3dTriangle *triangle = &source->GetTriangles()[i];
@@ -141,9 +142,8 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, cons
 
 		triangles->triangles.push_back(t);
 	}
-	WriteChunk(triangles, fp);
 
-	GroupsChunk *groups = new GroupsChunk();
+	groups = new GroupsChunk();
 	for (uint32_t i = 0; i < source->GetNumMeshes(); ++i)
 	{
 		const Ms3dMesh *mesh = &source->GetMeshes()[i];
@@ -180,9 +180,8 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, cons
 			group->texture = extraGroupInfo->textureFile;
 		}
 	}
-	WriteChunk(groups, fp);
 
-	JointsChunk *joints = new JointsChunk();
+	joints = new JointsChunk();
 	for (uint32_t i = 0; i < source->GetNumJoints(); ++i)
 	{
 		const Ms3dJoint *joint = &source->GetJoints()[i];
@@ -195,9 +194,8 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, cons
 
 		joints->joints.push_back(j);
 	}
-	WriteChunk(joints, fp);
 
-	JointToVerticesChunk *jointToVertices = new JointToVerticesChunk();
+	jointToVertices = new JointToVerticesChunk();
 	for (uint32_t i = 0; i < uniqueVertices.GetCount(); ++i)
 	{
 		const UniqueVertex *vertex = uniqueVertices.GetVertex(i);
@@ -208,9 +206,8 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, cons
 
 		jointToVertices->jointVertexInfo.push_back(jvi);
 	}
-	WriteChunk(jointToVertices, fp);
 
-	KeyframesChunk *keyframes = new KeyframesChunk(source->GetNumJoints());
+	keyframes = new KeyframesChunk(source->GetNumJoints());
 	for (int32_t i = 0; i < source->GetNumFrames(); ++i)
 	{
 		Keyframe *f = keyframes->AddFrame();
@@ -245,18 +242,33 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, cons
 			f->rotation[j] = rotation->param;
 		}
 	}
-	WriteChunk(keyframes, fp);
 
 	if (metadata->IsLoaded() && metadata->GetNumAnimations() > 0)
 	{
-		AnimationsChunk *animations = new AnimationsChunk();
+		animations = new AnimationsChunk();
 		for (uint32_t i = 0; i < metadata->GetNumAnimations(); ++i)
 		{
 			AnimationSequence animation = metadata->GetAnimations()[i];
 			animations->animations.push_back(animation);
 		}
-		WriteChunk(animations, fp);
 	}
+
+	FILE *fp = fopen(meshFilename.c_str(), "wb");
+	if (fp == NULL)
+		return FALSE;
+	
+	WriteFileHeader(fp);
+	WriteChunk(vertices, fp);
+	WriteChunk(normals, fp);
+	WriteChunk(texCoords, fp);
+	WriteChunk(triangles, fp);
+	WriteChunk(groups, fp);
+	WriteChunk(joints, fp);
+	WriteChunk(jointToVertices, fp);
+	WriteChunk(keyframes, fp);
+	WriteChunk(animations, fp);
+	
+	fclose(fp);
 
 	return TRUE;
 }
