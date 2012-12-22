@@ -3,6 +3,7 @@
 #include <exception>
 
 #include "meshfile.h"
+#include "metadata/metadatafile.h"
 #include "ms3d/ms3d.h"
 
 int main(int argc, char **argv)
@@ -83,19 +84,23 @@ int main(int argc, char **argv)
 	metadataFile.append((".xml"));
 
 	// load the MS3D ...
-	Ms3d *ms3d = new Ms3d();
-	if (!ms3d->Load(file))
+	Ms3d ms3d;
+	if (!ms3d.Load(file))
 	{
 		printf("Error loading MS3D file.\n\n");
 		return 1;
 	}
 	
 	// attempt to load a metadata file
-	// TODO: write this
+	MetadataFile metadata;
+	if (!metadata.Load(metadataFile))
+	{
+		printf("Error loading metadata XML.\n\n");
+		return 1;
+	}
 	
 	// convert to a mesh file
-	// TODO: pass in loaded metadata object
-	if (!ConvertToMeshFile(meshFile, ms3d, scaleFactor))
+	if (!ConvertToMeshFile(meshFile, &ms3d, &metadata, scaleFactor))
 	{
 		printf("Error converting MS3D to MESH.\n\n");
 		return 1;

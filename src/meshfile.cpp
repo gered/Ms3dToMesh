@@ -1,6 +1,7 @@
 #include "meshfile.h"
 
 #include "animationsequence.h"
+#include "metadata/metadatafile.h"
 #include "ms3d/ms3d.h"
 #include "chunks/animations.h"
 #include "chunks/chunks.h"
@@ -25,7 +26,7 @@
 #include <vector>
 #include <assert.h>
 
-BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, float scaleFactor)
+BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, const MetadataFile *metadata, float scaleFactor)
 {
 	FILE *fp = fopen(meshFilename.c_str(), "wb");
 	if (fp == NULL)
