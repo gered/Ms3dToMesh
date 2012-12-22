@@ -13,6 +13,7 @@
 #include "chunks/texcoords.h"
 #include "chunks/triangles.h"
 #include "chunks/vertices.h"
+#include "geometry/extragroupinfo.h"
 #include "geometry/group.h"
 #include "geometry/joint.h"
 #include "geometry/jointvertexinfo.h"
@@ -149,9 +150,35 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, cons
 
 		Group g;
 		g.name = mesh->name;
+		g.texture.clear();     // TODO: grab this from the Ms3d material info
+		g.alpha = 0;
 		g.numTriangles = mesh->numTriangles;
 
 		groups->groups.push_back(g);
+	}
+	if (metadata->IsLoaded() && metadata->GetNumGroupInfo() > 0)
+	{
+		for (uint32_t i = 0; i < metadata->GetNumGroupInfo(); ++i)
+		{
+			const ExtraGroupInfo *extraGroupInfo = &metadata->GetGroupInfo()[i];
+			
+			// find matching Group from the chunk data we just populated
+			int32_t index;
+			if (extraGroupInfo->specifiedByName)
+				index = source->FindIndexOfMesh(extraGroupInfo->name);
+			else
+				index = (int32_t)extraGroupInfo->index;
+			
+			if (index == -1)
+			{
+				printf("Mesh conversion error: metadata group info references invalid MS3D group\n");
+				return FALSE;
+			}
+			
+			Group *group = &groups->groups[index];
+			group->alpha = extraGroupInfo->alphaBlend ? 1 : 0;
+			group->texture = extraGroupInfo->textureFile;
+		}
 	}
 	WriteChunk(groups, fp);
 
