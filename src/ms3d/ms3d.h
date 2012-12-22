@@ -126,6 +126,7 @@ public:
 	Ms3dJoint* GetJoints() const                           { return m_joints; }
 	const Ms3dAnimation* GetAnimation(int index) const     { return &m_animations[index]; }
 
+	int32_t FindIndexOfMesh(const std::string &meshName) const;
 	int32_t FindIndexOfJoint(const std::string &jointName) const;
 
 private:

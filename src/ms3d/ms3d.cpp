@@ -240,6 +240,21 @@ BOOL Ms3d::Load(const std::string &file)
 	return TRUE;
 }
 
+int32_t Ms3d::FindIndexOfMesh(const std::string &meshName) const
+{
+	if (meshName.length() == 0)
+		return -1;
+	
+	for (uint16_t i = 0; i < m_numMeshes; ++i)
+	{
+		Ms3dMesh *mesh = &m_meshes[i];
+		if (mesh->name == meshName)
+			return i;
+	}
+	
+	return -1;
+}
+
 int32_t Ms3d::FindIndexOfJoint(const std::string &jointName) const
 {
 	if (jointName.length() == 0)
