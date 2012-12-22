@@ -4,7 +4,7 @@
 #include "common.h"
 #include <string>
 
-class AnimationSequence
+struct AnimationSequence
 {
 public:
 	std::string name;
