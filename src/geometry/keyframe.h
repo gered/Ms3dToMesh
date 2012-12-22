@@ -33,8 +33,8 @@ inline uint32_t Keyframe::GetSize() const
 {
 	uint32_t singleJointFrameSize = 0;
 
-	singleJointFrameSize += (sizeof(float) * 3) * 3;               // position (xyz)
-	singleJointFrameSize += (sizeof(float) * 3) * 3;               // rotation (xyz)
+	singleJointFrameSize += sizeof(float) * 3;               // position (xyz)
+	singleJointFrameSize += sizeof(float) * 3;               // rotation (xyz)
 
 	uint32_t size = 0;
 
