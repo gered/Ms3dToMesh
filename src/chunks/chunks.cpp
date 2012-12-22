@@ -126,11 +126,16 @@ void WriteChunk(GroupsChunk *chunk, FILE *fp)
 	for (uint32_t i = 0; i < count; ++i)
 	{
 		const Group *group = &chunk->groups[i];
-
-		fwrite(group->name.c_str(), group->name.size(), 1, fp);
-		char c = '\0';
-		fwrite(&c, 1, 1, fp);
+		char c;
 		
+		fwrite(group->name.c_str(), group->name.size(), 1, fp);
+		c = '\0';
+		fwrite(&c, 1, 1, fp);
+		if (group->texture.length() > 0)
+			fwrite(group->texture.c_str(), group->texture.size(), 1, fp);
+		c = '\0';
+		fwrite(&c, 1, 1, fp);
+		fwrite(&group->alpha, sizeof(uint8_t), 1, fp);
 		fwrite(&group->numTriangles, sizeof(uint32_t), 1, fp);
 	}
 }
