@@ -6,7 +6,9 @@
 
 struct ExtraGroupInfo
 {
+	BOOL specifiedByName;
 	std::string name;
+	uint32_t index;
 	std::string textureFile;
 	BOOL alphaBlend;
 	
@@ -15,6 +17,8 @@ struct ExtraGroupInfo
 
 inline ExtraGroupInfo::ExtraGroupInfo()
 {
+	specifiedByName = FALSE;
+	index = 0;
 	alphaBlend = FALSE;
 }
 
