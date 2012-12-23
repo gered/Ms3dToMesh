@@ -16,6 +16,7 @@ public:
 	void Release();
 	BOOL Load(const std::string &file);
 	
+	float GetScale() const                                 { return m_scale; }
 	uint32_t GetNumAnimations() const                      { return m_animations.size(); }
 	const AnimationSequence* GetAnimations() const         { return &m_animations[0]; }
 	uint32_t GetNumGroupInfo() const                       { return m_groupInfo.size(); }
@@ -26,6 +27,7 @@ public:
 private:
 	BOOL m_isLoaded;
 	
+	float m_scale;
 	std::vector<AnimationSequence> m_animations;
 	std::vector<ExtraGroupInfo> m_groupInfo;
 };

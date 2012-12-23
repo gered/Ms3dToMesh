@@ -7,16 +7,19 @@
 #include <string>
 #include <vector>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 MetadataFile::MetadataFile()
 {
 	m_isLoaded = FALSE;
+	m_scale = 1.0f;
 }
 
 void MetadataFile::Release()
 {
 	m_isLoaded = FALSE;
+	m_scale = 1.0f;
 }
 
 BOOL MetadataFile::Load(const std::string &file)
@@ -107,6 +110,21 @@ BOOL MetadataFile::Load(const std::string &file)
 			groupInfo.textureFile = texture;
 		
 		m_groupInfo.push_back(groupInfo);
+	}
+	
+	pugi::xml_node transformationsNode = rootNode.child("transformations");
+	for (pugi::xml_node transformation = transformationsNode.first_child(); transformation; transformation = transformation.next_sibling())
+	{
+		std::string name = transformation.name();
+		if (name == "scale")
+		{
+			if (strlen(transformation.value()) == 0)
+			{
+				printf("Metadata XML error: no scale factor provided\n");
+				return FALSE;
+			}
+			m_scale = atof(transformation.value());
+		}
 	}
 	
 	m_isLoaded = TRUE;
