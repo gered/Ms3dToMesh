@@ -118,12 +118,12 @@ BOOL MetadataFile::Load(const std::string &file)
 		std::string name = transformation.name();
 		if (name == "scale")
 		{
-			if (strlen(transformation.value()) == 0)
+			if (strlen(transformation.child_value()) == 0)
 			{
 				printf("Metadata XML error: no scale factor provided\n");
 				return FALSE;
 			}
-			m_scale = atof(transformation.value());
+			m_scale = atof(transformation.child_value());
 		}
 	}
 	
