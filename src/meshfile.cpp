@@ -27,7 +27,7 @@
 #include <vector>
 #include <assert.h>
 
-BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, const MetadataFile *metadata, float scaleFactor)
+BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, const MetadataFile *metadata)
 {
 	VerticesChunk *vertices = NULL;
 	NormalsChunk *normals = NULL;
@@ -38,6 +38,11 @@ BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, cons
 	JointToVerticesChunk *jointToVertices = NULL;
 	KeyframesChunk *keyframes = NULL;
 	AnimationsChunk *animations = NULL;
+	
+	// global-ish metadata info
+	float scaleFactor = 1.0f;
+	if (metadata->IsLoaded())
+		scaleFactor = metadata->GetScale();
 	
 	// collect all unique vertices (position + normal + texcoord) and the 
 	// original MS3D file data vertex index each one was originally from based 

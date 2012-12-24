@@ -7,6 +7,6 @@
 class MetadataFile;
 class Ms3d;
 
-BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, const MetadataFile *metadata, float scaleFactor);
+BOOL ConvertToMeshFile(const std::string &meshFilename, const Ms3d *source, const MetadataFile *metadata);
 
 #endif

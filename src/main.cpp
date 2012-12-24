@@ -12,41 +12,11 @@ int main(int argc, char **argv)
 
 	if (argc == 1)
 	{
-		printf("No input file specified.\n");
-		printf("Usage: ms3dtomesh.exe [--scale=<scale factor>] [inputfile]\n\n");
+		printf("Usage: ms3dtomesh.exe inputFile\n\n");
 		return 1;
 	}
 
-	// input file is always the last argument
-	std::string file = argv[argc - 1];
-
-	// default option values
-	float scaleFactor = 1.0f;
-
-	// find any options and update their values
-	for (int i = 1; i < argc - 1; ++i)
-	{
-		std::string arg = argv[i];
-
-		if (arg.substr(0, 8) == "--scale=")
-		{
-			// scale factor
-
-			if (arg.length() == 8)
-			{
-				printf("Missing scale factor.\n");
-				return 1;
-			}
-
-			scaleFactor = (float)atof(arg.substr(8).c_str());
-
-			if (scaleFactor == 0.0f)
-			{
-				printf("Invalid or 0.0 scale factor.\n");
-				return 1;
-			}
-		}
-	}
+	std::string file = argv[1];
 
 	// find file extension part of the string in the input filename
 	// we will use this to make an appropriate output mesh filename *and*
@@ -100,7 +70,7 @@ int main(int argc, char **argv)
 	}
 	
 	// convert to a mesh file
-	if (!ConvertToMeshFile(meshFile, &ms3d, &metadata, scaleFactor))
+	if (!ConvertToMeshFile(meshFile, &ms3d, &metadata))
 	{
 		printf("Error converting MS3D to MESH.\n\n");
 		return 1;
